@@ -35,6 +35,7 @@ void LoadDictionary(HashTableType & hash_table, const string &dictionary_filenam
 // @ hash_table - Object of class Hashtable
 // @ s - word which will be spellchecked by swapping
 // spellchecks word by swapping adjacent chars
+// @output- outputs the misspelled word with it's correction, if found
 // @return - if a word is found in hashtable, stops swapping and returns true
 // @return - else spellcheck by swapping fails and returns false
 template <typename HashTableType>
@@ -57,6 +58,7 @@ bool SpellCheckBySwappingChars(const HashTableType & hash_table, const string &s
 // @ hash_table - Object of class Hashtable
 // @ s - word which will be spellchecked removing chars
 // spellchecks word by removing every possible char in word
+// @output- outputs the misspelled word with it's correction, if found
 // @return - if a word is found in hashtable, stops removing chars and returns true
 // @return - else spellcheck by removing chars fails and returns false
 template <typename HashTableType>
@@ -79,6 +81,7 @@ bool SpellCheckByRemovingChars(const HashTableType & hash_table,const string &s)
 // @ hash_table - Object of class Hashtable
 // @ s - word which will be spellchecked removing chars
 // spellchecks word by adding chars a to z at every possible position in word
+// @output- outputs the misspelled word with it's correction, if found
 // @return - if a word is found in hashtable, stops adding chars and returns true
 // @return - else spellcheck by adding chars fails and returns false
 template <typename HashTableType>
@@ -132,11 +135,11 @@ int main(int argc, char **argv)
 	cout <<"Dictionary filename: " << dictionary_file << endl;
 
 	HashTable <string> new_hash_table;  //object of Quadratic Probing class
-	LoadDictionary(new_hash_table,dictionary_file);
+	LoadDictionary(new_hash_table,dictionary_file); //Load words into HashTable
 	
 	ifstream query_test (document_file);
 	string word;
-	bool word_found;
+	bool word_found;  
 	cout << "Spell Checking..." << endl;
 	while (query_test >> word)
 	{

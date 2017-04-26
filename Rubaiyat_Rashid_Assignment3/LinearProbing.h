@@ -3,7 +3,7 @@
 
 // Class HashTableLinear - Linear Probing
 // This class is Inherited from class Hashtable
-// Please refer to QuadraticProbing.h for methods which HashTableLinear will be inherited from 
+// Please refer to QuadraticProbing.h for methods from parent class which HashTableLinear will be inherited from 
 // Overriden Function: FindPos(x)
 
 // Linear probing implementation.

@@ -3,7 +3,7 @@
 
 // Class HashTableDouble - Double Hashing
 // This class is Inherited from class Hashtable
-// Please refer to QuadraticProbing.h for methods which HashTableDouble will be inherited from
+// Please refer to QuadraticProbing.h for methods which parent class HashTableDouble will be inherited from
 // Overriden Function: FindPos(x)
 // Added Function: Hash2(X)
 
