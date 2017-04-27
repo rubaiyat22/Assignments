@@ -40,16 +40,16 @@ int NextPrime(size_t n)
 //
 // CONSTRUCTION: zero parameter
 //
-// ******************PUBLIC OPERATIONS****************************************
-// void insert( x )       --> Insert x into HashTable
-// void remove( x )       --> Remove x from Hashtable
-// bool contains( x )     --> Return true if x is present
-// Makey_eEmpty()            --> Clears up Hashtable
-// TotalNumOfElements()   --> Returns number of elements present in Hashtable
-// TableSize()            --> Returns current Table Size
-// TotalNumOfCollisions() --> Returns total number of collisions
-// NumOfProbes()          --> Returns number of probes for each search
-// **************************************************************************
+// ******************PUBLIC OPERATIONS*************************************************
+// void insert( key, obj )       	--> Insert obj into HashTable at key 
+// void remove( key )       		--> Remove obj from Hashtable from key
+// bool contains( key, obj )     	--> Return true if obj is present
+// Make_Empty()            			--> Clears up Hashtable
+// TotalNumOfElements()   			--> Returns number of elements present in Hashtable
+// TableSize()            			--> Returns current Table Size
+// GetElement (key)                 --> return element corresponding to key
+// ChangeElement (key)              --> chages element at key
+// ************************************************************************************
 
 // Sample Uses:
 //    <> HashTable <string> new_hash_table;
@@ -99,6 +99,9 @@ public:
 		return true;
 	}
 
+	//If no empty position found, return false
+	//else, sets element_ to x and info_ to active
+	//if table is half full, rehash is called
 	bool Insert(Comparable && key, HashedObj && x) 
 	{
 		// Insert x as active
@@ -107,7 +110,7 @@ public:
 			return false;
 		
 		array_[current_pos].key_ = std::move(key);
-		array_[current_pos].element_ = std::move(x);
+		array_[current_pos].element_ = x;
 		array_[current_pos].info_ = ACTIVE;
 
 		// Rehash; see Section 5.5
@@ -117,6 +120,8 @@ public:
 		return true;
 	}
 	
+	//if a position containing x is empty, returns false
+	//else, sets info_ of x to DELETED and returns true
 	bool Remove (const Comparable & key)
 	{
 		size_t current_pos = FindPos(key);
@@ -154,16 +159,12 @@ protected:
 		Comparable key_;
 		HashedObj element_;
 		EntryType info_;
-		
-		//HashEntry(const HashedObj& e = HashedObj{}, EntryType i = EMPTY)
-		//:element_{e}, info_{i} { }
+
 		HashEntry(const Comparable &k = Comparable{}, const HashedObj& e = HashedObj{}, EntryType i = EMPTY)
 			:key_ {k}, element_{e}, info_{i} { }
-		
-		//HashEntry(HashedObj && e, EntryType i = EMPTY)
-		//:element_{std::move(e)}, info_{ i } {}
+
 		HashEntry(const Comparable && k, HashedObj && e, EntryType i = EMPTY)
-			:key_{std::move(k)}, element_{std::move(e)}, info_{ i } {}
+			:key_{std::move(k)}, element_{e}, info_{ i } {}
 	};
 		
 	std::vector<HashEntry> array_;  // array which will store items 
@@ -178,7 +179,6 @@ protected:
 
 	//Finds a position where x can be inserted
 	//counts number of probes and collisions 
-
 	virtual size_t FindPos(const Comparable & key) const 
 	{
 		size_t offset = 1;
@@ -209,10 +209,11 @@ protected:
 		for (auto & entry :old_array)
 		{
 			if (entry.info_ == ACTIVE)
-	 			Insert(std::move (entry.key_), std::move(entry.element_));
+	 			Insert(std::move (entry.key_), entry.element_);
 		}
 	}
 
+	//calculates Hash(x) = key mod TableSize
 	virtual size_t InternalHash(const Comparable & key) const 
 	{
 		static std::hash<Comparable> hf;

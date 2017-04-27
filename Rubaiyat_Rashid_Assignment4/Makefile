@@ -66,14 +66,20 @@ run1a:
 		./$(PROGRAM_0) 100_numbers.txt 100_test_search.txt
 run1b: 	
 		./$(PROGRAM_0) 1000_numbers.txt 1000_test_search.txt
+run1c: 	
+		./$(PROGRAM_0) 10000_numbers.txt 10000_test_search.txt
 run2a: 	
 		./$(PROGRAM_1) 100_numbers.txt 100_test_deletion.txt
 run2b: 	
 		./$(PROGRAM_1) 1000_numbers.txt 1000_test_deletion.txt
+run2c:
+		./$(PROGRAM_1) 10000_numbers.txt 10000_test_deletion.txt
 run3a: 	
 		./$(PROGRAM_2) 100_numbers.txt 100_test_search.txt
 run3b: 	
 		./$(PROGRAM_2) 1000_numbers.txt 1000_test_search.txt
+run3c: 	
+		./$(PROGRAM_2) 10000_numbers.txt 10000_test_search.txt
 
 
 

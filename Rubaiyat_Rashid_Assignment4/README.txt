@@ -2,7 +2,7 @@
 	Name: Rubaiyat Rashid
 	Professor: Ioannis Stamos
 	Class: CSCI 335 
-	Purpose: Assignment #3
+	Purpose: Assignment #4
 	Contents: The .zip should contain: QuadraticProbing.h, LinearProbing.h, DoubleHashing.h, 
  		     CreateAndTestHash.cpp, SpellCheck.cpp
 	NOTE: QuadraticProbing.h was taken from https://users.cs.fiu.edu/~weiss/dsaa_c++4/code/  
