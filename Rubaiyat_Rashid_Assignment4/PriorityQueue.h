@@ -362,13 +362,9 @@ private:
 	void NewMerge(BinomialNode * a_element)
 	{
 		current_size_ += 1;
+		the_trees_.push_back(nullptr);
 		BinomialNode *t = a_element;
-		if (the_trees_[0] == nullptr)
-			the_trees_[0] = t;
-		else
-			the_trees_.push_back(nullptr);
-
-		for( size_t i = 1; i < current_size_; ++i)
+		for( size_t i = 0; i < current_size_; ++i)
 		{
 			if (the_trees_[i] == nullptr)
 			{
