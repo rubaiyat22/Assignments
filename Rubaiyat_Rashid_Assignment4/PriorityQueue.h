@@ -117,6 +117,7 @@ public:
 
 		BinomialNode *old_root = the_trees_[ min_index ];
 		BinomialNode *deleted_tree = old_root->left_child_;
+		old_root = nullptr;
 		delete old_root;
 
 		// Construct H''
@@ -128,7 +129,7 @@ public:
 			deleted_queue.the_trees_[ j ] = deleted_tree;
 			deleted_tree = deleted_tree -> next_sibiling_;
 			deleted_queue.the_trees_[ j ] -> next_sibiling_ = nullptr;
-			deleted_queue.the_trees_[ j ] -> parent_ = nullptr; //added
+			deleted_queue.the_trees_[ j ] -> parent_ = nullptr; //parents of each tree is nullptr
 		}
 
 		// Construct H'
@@ -361,9 +362,13 @@ private:
 	void NewMerge(BinomialNode * a_element)
 	{
 		current_size_ += 1;
-		the_trees_.push_back(nullptr);
 		BinomialNode *t = a_element;
-		for( size_t i = 0; i < current_size_; ++i)
+		if (the_trees_[0] == nullptr)
+			the_trees_[0] = t;
+		else
+			the_trees_.push_back(nullptr);
+
+		for( size_t i = 1; i < current_size_; ++i)
 		{
 			if (the_trees_[i] == nullptr)
 			{
