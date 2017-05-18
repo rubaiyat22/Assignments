@@ -30,3 +30,4 @@ IV. I/O files
 	- query_words.txt
 	- document1_short.txt
 	- document1.txt
+
