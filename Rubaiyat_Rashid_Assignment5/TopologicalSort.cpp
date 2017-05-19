@@ -1,3 +1,11 @@
+/**
+Name: Rubaiyat Rashid
+Class: CSCI 335
+Professor: Ioannis Stamos
+Purpose: Assignment 5
+Description:This file reads inputs from a text file containing vertices, adjacent vertices and corresponding costs.
+A graph is created using those inputs. Then TopologicanSort() is called.
+*/
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,8 +26,9 @@ int main(int argc, char **argv)
 	int number_of_vertices; 
 	input >> number_of_vertices;
 	cout <<"Number of vertices: "<< number_of_vertices << endl;
-	Graph new_graph (number_of_vertices);
+	Graph new_graph (number_of_vertices);  //object of graph class with total number of vertices as a parameter
 
+	cout << "Topological Sort..." << endl;
 	int vertex;
 	int adjacent_vertex;
 	double cost;

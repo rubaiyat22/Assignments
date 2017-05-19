@@ -4,6 +4,7 @@
 #include <queue>
 #include <limits>
 
+//A struct which contains a vertex number and cost of edge from a v.
 struct AdjacentVertex
 {
 	int v_num_;
@@ -12,20 +13,25 @@ struct AdjacentVertex
 	AdjacentVertex (const int & v, const double & c) : v_num_ {v}, cost_{c}{}
 };
 
+//A struct which contains everything a vertex requires such as distance, vertex number and path. 
+//It also contains a array of AdjacentVertex object.
 struct Vertex
 {
 	int vertex_num_;
 	bool known_;
 	double dist_;
-	int indigree_;
+	int indegree_;
 	int top_num_;
 	Vertex *path_; 
 	std::vector <AdjacentVertex> adj_list_;
 
 	Vertex (const int & v_num, const bool & k, const double & d, const int i, const int t_n, Vertex * p)
-		: vertex_num_ {v_num}, known_{k}, dist_ {d}, indigree_ {i}, top_num_{t_n}, path_ {p} {}	
+		: vertex_num_ {v_num}, known_{k}, dist_ {d}, indegree_ {i}, top_num_{t_n}, path_ {p} {}	
 };
 
+//This struct is used by stl priority_queue compare distances of vertices
+//The logic '>' instead of '<=' allows stl priority_queue to act as a min heap as opposed to 
+//max heap which is it's default 
 struct CompareVertices
 {
 	bool operator() (const Vertex * v1, const Vertex * v2) const
@@ -34,6 +40,11 @@ struct CompareVertices
 	}
 };
 
+//This is a non-templated class that stores a vector of vertices
+// Sample use:
+// Graph g (number of vertices)
+// g.Insert (vertex number, adjacent vertex number, cost of edge)
+// g.CheckAdjacency(vertex number, adjacent vertex number)
 class Graph
 {
 public:
@@ -44,16 +55,18 @@ public:
 		ClearGraph();
 	}
 
+	//Copy costructor
 	Graph(const Graph & rhs): vertices_ (rhs.vertices_.size())
 	{
 		for (size_t i = 1; i < rhs.vertices_.size(); i++)
 		{
 			vertices_[i] = new Vertex(rhs.vertices_[i] -> vertex_num_, rhs.vertices_[i] -> known_,
-			rhs.vertices_[i] -> dist_, rhs.vertices_[i] -> indigree_, rhs.vertices_[i] -> top_num_, rhs.vertices_[i] -> path_);
-			this->vertices_[i]->adj_list_ = rhs.vertices_[i]->adj_list_;
+			rhs.vertices_[i] -> dist_, rhs.vertices_[i] -> indegree_, rhs.vertices_[i] -> top_num_, rhs.vertices_[i] -> path_);
+			this->vertices_[i]->adj_list_ = rhs.vertices_[i]->adj_list_; // copy the adjacent list of each vertex
 		}	
 	}
 
+	//Copy Assignment operator
 	Graph & operator= (const Graph & rhs)
 	{
 		Graph copy = rhs;
@@ -61,6 +74,9 @@ public:
 		return *this;
 	}
 
+	//One param constuctor; creates 1 + the number of vertices given as a parameter
+	//to keep consistency between vertex number and position in the array
+	//Initializes positon 1 to number of vertixes + 1 with a default vertex object
 	Graph(const int & num_of_vertices) : vertices_ (num_of_vertices + 1)
 	{
 		size_t inf = std::numeric_limits<int>::max();
@@ -70,12 +86,16 @@ public:
 		}
 	}
 
+	//Parameters: a vertex, an adjacent vertex, and a cost of edge
+	//Inserts the adjacent vertex to adjacency_list
 	void Insert(const int & v, const int & adj_v, const double & cost)
 	{
 		AdjacentVertex adj (adj_v, cost);
 		vertices_[v] -> adj_list_.push_back (adj);
 	}
 
+	//Checks whether vertex v2 is an adjacent vertex of vertex v1
+	//If two vertices are connected, the cost of edge is outputted
 	void CheckAdjacency(const int & v1, const int & v2)
 	{
 		bool connection = false;
@@ -92,6 +112,9 @@ public:
 			std::cout << v1 <<" "<< v2 <<": Not Connected " << std::endl;
 	}
 
+	//Calculates shortest paths from vertex v to all the other vertices in the graph by using a stl min priority queue
+	//Once shortest paths is calculated, it traverses through the vector of vertices and calls PrintShortesPaths() 
+	//and output the cost 
 	void Dijkstra(const int & v)
 	{
 		vertices_[v] -> dist_ = 0;
@@ -129,11 +152,13 @@ public:
 			if (shortest_path_cost != std::numeric_limits<int>::max())
 				std::cout << "(Cost: " << shortest_path_cost << ")" << std::endl;
 			else
-				std::cout << "(No path)" << std::endl;
+				std::cout << "(No path)" << std::endl;  //no paths exist from starting vertex to this vertex
 		}
 		
 	}
 
+	//First calls CalculateIndigree() which will calculate indigrees of every vertex in graph
+	//Then, calls the actual function TopSort() which carries out the topological sort algorithm 
 	void TopologicalSort()
 	{
 		CalculateIndigrees();
@@ -141,8 +166,9 @@ public:
 	}
 
 private:
-	std::vector <Vertex*> vertices_;
+	std::vector <Vertex*> vertices_;  //array which stores vertices present in the graph
 
+	//clears up all the nodes in the graph 
 	void ClearGraph()
 	{
 		for (size_t i = 1; i < vertices_.size(); i++)
@@ -152,6 +178,7 @@ private:
 		}
 	}
 
+	//Traverses through each vertex present in the graph, and for each vertex increments the indegree of each adjacent vertices
 	void CalculateIndigrees()
 	{	
 		for (size_t i = 1; i < vertices_.size(); i++)
@@ -159,11 +186,12 @@ private:
 			for (size_t j = 0; j < vertices_[i] -> adj_list_.size(); j++)
 			{
 				int adj_v_num = vertices_[i] -> adj_list_[j].v_num_;
-				vertices_[adj_v_num] -> indigree_++;
+				vertices_[adj_v_num] -> indegree_++;  //incrementing the indegree_ of the adjacent vertices
 			}
 		}
 	}
 
+	//recursively outputs the shortest from starting vertex used in Dijkstra() to vertex v
 	void PrintShortestPaths (Vertex * v)
 	{
 		if (v -> path_ !=  nullptr)
@@ -173,6 +201,7 @@ private:
 		std::cout << v -> vertex_num_ << " ";
 	}
 
+	//Outputs the vertices present in a topological order using a stl queue 
 	void TopSort()
 	{
 		std::queue <Vertex*> a_queue;
@@ -180,23 +209,27 @@ private:
 
 		for (size_t i = 1; i < vertices_.size(); i++)
 		{
-			if (vertices_[i] -> indigree_ == 0)
+			if (vertices_[i] -> indegree_ == 0)
 				a_queue.push(vertices_[i]);
 		}
 
-		while (!(a_queue.empty()))
+		while (!a_queue.empty())
 		{
 			Vertex * v = a_queue.front();
-			std::cout << v -> vertex_num_ <<", ";
+			std::cout << v -> vertex_num_;
 			a_queue.pop();
 			v -> top_num_ = ++count;
 			for (int j = 0; j < v -> adj_list_.size(); j++)
 			{
 				Vertex * w = vertices_[v ->adj_list_[j]. v_num_];
-				w -> indigree_--;
-				if (w -> indigree_ == 0)
+				w -> indegree_--;
+				if (w -> indegree_ == 0)
 					a_queue.push (w);
 			}
+			if (a_queue.empty())
+				std::cout << ".";
+			else
+				std::cout << ", ";
 		}
 		if (count != vertices_.size()-1)
 			std::cout << "Cycle Found "<< std::endl;

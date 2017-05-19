@@ -56,13 +56,22 @@ all:
 		make $(PROGRAM_1)
 		make $(PROGRAM_2) 
 
-run1: 	
+run1a: 	
+		./$(PROGRAM_0) Graph1.txt AdjacencyQueries1.txt
+run1b: 	
 		./$(PROGRAM_0) Graph2.txt AdjacencyQueries2.txt
-run2: 	
-		./$(PROGRAM_1) Graph2.txt 5
-run3: 	
+run2a: 	
+		./$(PROGRAM_1) Graph1.txt 1
+run2b: 	
+		./$(PROGRAM_1) Graph2.txt 1
+run2c: 	
+		./$(PROGRAM_1) Graph3.txt 1
+run3a: 	
+		./$(PROGRAM_2) Graph1.txt
+run3b: 	
+		./$(PROGRAM_2) Graph2.txt
+run3c: 	
 		./$(PROGRAM_2) Graph3.txt
-
 
 #Clean obj files
 

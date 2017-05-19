@@ -1,3 +1,12 @@
+/**
+Name: Rubaiyat Rashid
+Class: CSCI 335
+Professor: Ioannis Stamos
+Purpose: Assignment 5
+Description: This file reads inputs from a text file containing vertices, adjacent vertices and correspodings costs.
+A graph is created using those inputs. Then, some vertices and adjacent vertices are read from a query file to test
+whether the vertices and adjacent vertices are connected. If connected, the cost of the edge is outputted. 
+*/
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -19,14 +28,8 @@ int main(int argc, char **argv)
 	int number_of_vertices; 
 	input >> number_of_vertices;
 	cout <<"Number of vertices: "<< number_of_vertices << endl;
-	Graph new_graph (number_of_vertices);
-	/*
-	new_graph.CheckAdjacency(4, 1);
-	new_graph.CheckAdjacency(3, 4);
-	new_graph.CheckAdjacency(1, 5);
-	new_graph.CheckAdjacency(5, 1);
-	new_graph.CheckAdjacency(1, 3);
-	*/
+	Graph new_graph (number_of_vertices); //object of graph class with total number of vertices as a parameter
+
 	int vertex;
 	int adjacent_vertex;
 	double cost;
@@ -34,26 +37,21 @@ int main(int argc, char **argv)
 	{
 		stringstream str_stream(line);
 		str_stream >> vertex;
-		//cout << "vertex " << vertex << " ";
-
 		while (str_stream >> adjacent_vertex && str_stream >> cost)
 		{	
 			new_graph.Insert(vertex, adjacent_vertex, cost);
-			//cout << adjacent_vertex << " " << cost << endl;
 		}
-		//cout << endl;
 	}
 
 	ifstream query(adjacency_query_file);
+	cout << "Testing for Adjacency..." << endl;
 	while (getline(query, line))
 	{
 		stringstream str_stream(line);
 		while (str_stream >> vertex && str_stream >> adjacent_vertex)
 		{	
-			//cout << vertex << " " << adjacent_vertex << endl;
 			new_graph.CheckAdjacency(vertex, adjacent_vertex);
 		}
-		//cout << endl;
 	}
 
 	return 0;
